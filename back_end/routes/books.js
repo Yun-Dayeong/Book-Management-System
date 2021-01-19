@@ -24,7 +24,7 @@ router.get('/getBook/:bookId', function (req, res) {
     pool.getConnection((err, conn) => {
         if (err) { console.log(err) }
         else {
-            var sql = "SELECT `tb_book_name`, `tb_book_author`, `tb_book_image`, `tb_book_state` FROM `tb_book` WHERE `tb_book_id` = ?"
+            var sql = "SELECT * FROM `tb_book` WHERE `tb_book_id` = ?"
             conn.query(sql, [req.params.bookId], (err, result) => {
                 conn.release()
                 if (err) { console.log(err) }
@@ -91,12 +91,22 @@ router.post('/deleteBook', function (req, res) {
     pool.getConnection((err, conn) => {
         if (err) { console.log(err) }
         else {
-            var sql = "DELETE FROM `tb_book` WHERE `tb_book_id`=?"
+            var sql = "SELECT * FROM `tb_borrow` WHERE `tb_book_id`=?"
+            var sql2 = "DELETE FROM `tb_book` WHERE `tb_book_id`=?"
             conn.query(sql, [req.body.bookId], (err, result) => {
-                conn.release()
+                console.log(result)
                 if (err) { console.log(err) }
+                else if (result.length === 0) {
+                    conn.query(sql2, [req.body.bookId], (err, result) => {
+                        conn.release()
+                        if (err) { console.log(err) }
+                        else {
+                            res.send(result)
+                        }
+                    })
+                }
                 else {
-                    res.send(result)
+                    res.send("대출됨")
                 }
             })
         }
@@ -145,6 +155,22 @@ router.post('/returnBook', function (req, res) {
                         }
 
                     })
+                }
+            })
+        }
+    })
+});
+
+/* 책을 대출한 user 데이터 불러오기 */
+router.get('/borrowUser/:bookId', function (req, res) {
+    pool.getConnection((err, conn) => {
+        if (err) { console.log(err) }
+        else {
+            var sql = "SELECT * FROM `tb_borrow` WHERE `tb_book_id`=?"
+            conn.query(sql, [req.params.bookId], (err, result) => {
+                if (err) { console.log(err) }
+                else {
+                    res.send(result)
                 }
             })
         }
