@@ -11,7 +11,6 @@ const customStyles = {
         transform: 'translate(-50%, -50%)'
     }
 };
-
 Modal.setAppElement('body')
 
 const MainPresenter = (props) => {
