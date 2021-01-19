@@ -12,6 +12,8 @@ const customStyles = {
     }
 };
 
+Modal.setAppElement('body')
+
 const MainPresenter = (props) => {
     return (
         <div>
