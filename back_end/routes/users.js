@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var pool = require('../config/dbConfig')
 
+router.use(express.static('public'));
+
 /* 회원 데이터 불러오기 */
 router.get('/getUser/:userId', function (req, res) {
   pool.getConnection((err, conn) => {

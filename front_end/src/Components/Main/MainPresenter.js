@@ -18,7 +18,7 @@ const MainPresenter = (props) => {
         <div>
             {props.bookData.map((book, index) => (
                 <div key={book.tb_book_id} onClick={() => props.openModal(book.tb_book_id)}>
-                    <img src={book.tb_book_image} alt="bookImage" width={120} height={200} />
+                    <img src={book.tb_book_image} alt="BookImage" width={120} height={200} />
                     <div>{book.tb_book_name}</div>
                     <div>{book.tb_book_author}</div>
                     <div>{book.tb_book_state}</div>
@@ -30,7 +30,7 @@ const MainPresenter = (props) => {
                 style={customStyles}
                 contentLabel="Book Detail">
                 <div>책 정보</div>
-                <img src={props.modalBook.tb_book_image} alt="bookImage" width={120} height={200} />
+                <img src={props.modalBook.tb_book_image} alt="BookImage" width={120} height={200} />
                 <div>제목 : {props.modalBook.tb_book_name}</div>
                 <div>작가 : {props.modalBook.tb_book_author}</div>
                 <div>대출 상태 : {props.modalBook.tb_book_state}</div>

@@ -9,7 +9,9 @@ class BookRegisterContainer extends Component {
     state = {
         bookName: "",
         bookAuthor: "",
-        bookImage: "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20130206_139%2Fapp4857_1360157994292NfIeo_PNG%2F%25B8%25B6%25BD%25C3%25B8%25E1%25B7%25CE_%25C0%25CC%25BE%25DF%25B1%25E22.png&type=a340"
+
+        bookImage: "",
+        imageViewURL: ""
     }
 
     changehandler = (e) => {
@@ -18,30 +20,48 @@ class BookRegisterContainer extends Component {
         })
     }
 
-    _imageSetting = () => {
-
+    _inputFile = (e) => {
+        let reader = new FileReader();
+        let imageFile = e.target.files[0];
+        console.log(imageFile)
+        reader.onloadend = () => {
+            this.setState({
+                bookImage: imageFile,
+                imageViewURL: reader.result
+            })
+        }
+        reader.readAsDataURL(imageFile);
     }
 
     _bookRegister = () => {
-
-        //image register
-
-
-
         //book register
         am.url = "http://192.168.0.2:4000/books/insertBook"
-        am.data = { bookName: this.state.bookName, bookAuthor: this.state.bookAuthor, bookImage: this.state.bookImage }
+        am.data = { bookName: this.state.bookName, bookAuthor: this.state.bookAuthor }
 
         am.post((data) => {
-            console.log(data)
-            this.props.history.push('/')
+            //image register
+            var formData = new FormData();
+            formData.append("bookId", data.insertId)
+            formData.append("file", this.state.bookImage)
+            am.url = "http://192.168.0.2:4000/books/insertBookImage";
+            am.data = formData;
+
+            am.post((data) => {
+                console.log(data);
+                this.props.history.push('/');
+            })
         })
     }
 
     render() {
         return (
             <div>
-                <BookRegisterPresenter {...this.props} {...this.state} changehandler={this.changehandler} imageSetting={this._imageSetting} bookRegister={this._bookRegister}></BookRegisterPresenter>
+                <BookRegisterPresenter
+                    {...this.props}
+                    {...this.state}
+                    changehandler={this.changehandler}
+                    bookRegister={this._bookRegister}
+                    inputFile={this._inputFile}></BookRegisterPresenter>
             </div>
         );
     }
