@@ -8,6 +8,7 @@ import Main from './Components/Main'
 import MyInfo from './Components/MyInfo'
 import BookRegister from './Components/BookRegister'
 import BookUpdate from './Components/BookUpdate'
+import BookSearch from './Components/BookSearch'
 
 class App extends Component {
 
@@ -43,6 +44,7 @@ class App extends Component {
         <Route path="/myInfo" render={(props) => <MyInfo {...this.state} {...props}></MyInfo>} />
         <Route path="/bookRegister" render={(props) => <BookRegister {...this.state} {...props}></BookRegister>} />
         <Route path="/bookUpdate" render={(props) => <BookUpdate {...this.state} {...props}></BookUpdate>} />
+        <Route path="/bookSearch/:searchName" render={(props) => <BookSearch {...this.state} {...props}></BookSearch>} />
       </BrowserRouter>
     );
   }

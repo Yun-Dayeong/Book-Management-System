@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom'
 
 const Header = (props) => {
+    const [inputs, setInputs] = useState({
+        searchName: ""
+    });
+
+    const { searchName } = inputs;
+
+    const changehandler = (e) => {
+        const { value, name } = e.target;
+        setInputs({
+            ...inputs,
+            [name]: value
+        });
+    };
+
     return (
         <ul>
             <li><Link to='/'>메인</Link></li>
+            <input name="searchName" placeholder="책 이름을 검색하세요. " onChange={changehandler} value={searchName}></input>
+            <Link to={`/bookSearch/${searchName}`}><button>검색</button></Link>
             {
                 props.userManagement === 0 ?
                     <div>

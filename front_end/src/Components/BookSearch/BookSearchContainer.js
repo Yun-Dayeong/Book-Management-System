@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import APIManager from '../../APIManagers';
-import MainPresenter from './MainPresenter'
+import BookSearchPresenter from './BookSearchPresenter';
 
-let am = new APIManager()
+let am = new APIManager();
 
-class MainContainer extends Component {
-
+class BookSearchContainer extends Component {
     state = {
         bookData: [],
+        searchName: "",
         modalIsOpen: false,
 
         modalBook: []
@@ -25,7 +25,10 @@ class MainContainer extends Component {
         am.url = "http://192.168.0.2:4000/books/getAllBook"
 
         am.get((data) => {
-            console.log(data)
+            data = data.filter(book => {
+                console.log(book)
+                return book.tb_book_name.includes(this.props.match.params.searchName)
+            })
             this.setState({
                 bookData: data
             })
@@ -112,7 +115,7 @@ class MainContainer extends Component {
     render() {
         return (
             <div>
-                <MainPresenter
+                <BookSearchPresenter
                     {...this.props}
                     {...this.state}
                     openModal={this._openModal}
@@ -120,10 +123,10 @@ class MainContainer extends Component {
                     updateBookData={this._updateBookData}
                     deleteBook={this._deleteBook}
                     borrow={this._borrow}
-                    return={this._return}></MainPresenter>
+                    return={this._return}></BookSearchPresenter>
             </div>
         );
     }
 }
 
-export default MainContainer;
+export default BookSearchContainer;
