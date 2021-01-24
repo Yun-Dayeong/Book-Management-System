@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal'
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 const customStyles = {
     content: {
@@ -55,6 +56,9 @@ const MainPresenter = (props) => {
                 }
                 <button onClick={props.closeModal}>close</button>
             </Modal>
+            <span onClick={props.clickPrevious}><IoIosArrowBack /></span>
+            <span>{props.page}</span>
+            <span onClick={props.clickNext}><IoIosArrowForward /></span>
         </div>
     );
 };

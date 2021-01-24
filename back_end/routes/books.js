@@ -1,7 +1,10 @@
 var express = require('express');
+var multer = require('multer');
+var fs = require('fs');
+var url = require('url');
+
 var router = express.Router();
 var pool = require('../config/dbConfig');
-var multer = require('multer');
 
 router.use(express.static('public'));
 
@@ -10,17 +13,44 @@ var bookId = ""
 
 /* 전체 책 데이터 불러오기 */
 router.get('/getAllBook', function (req, res) {
+    var urlParse = url.parse(req.url, true);
+    var queryString = urlParse.query;
+
     pool.getConnection((err, conn) => {
         if (err) { console.log(err) }
         else {
-            var sql = "SELECT `tb_book_id`, `tb_book_name`, `tb_book_author`, `tb_book_image`, `tb_book_state` FROM `tb_book`"
-            conn.query(sql, (err, result) => {
-                conn.release()
-                if (err) { console.log(err) }
-                else {
-                    res.send(result)
-                }
-            })
+            //해당 tb_book_id의 Next 데이터 불러올 때
+            if (queryString.nextId !== undefined) {
+                var sql = "SELECT `tb_book_id`, `tb_book_name`, `tb_book_author`, `tb_book_image`, `tb_book_state` FROM `tb_book` WHERE `tb_book_id` < ? ORDER BY `tb_book_id` DESC LIMIT 10"
+                conn.query(sql, [queryString.nextId], (err, result) => {
+                    conn.release()
+                    if (err) { console.log(err) }
+                    else {
+                        res.send(result)
+                    }
+                })
+            }
+            //해당 tb_book_id의 previous 데이터 불러올 때
+            else if (queryString.previousId !== undefined) {
+                var sql = "SELECT `tb_book_id`, `tb_book_name`, `tb_book_author`, `tb_book_image`, `tb_book_state` FROM `tb_book` WHERE `tb_book_id` > ? ORDER BY `tb_book_id` DESC LIMIT 10"
+                conn.query(sql, [queryString.previousId], (err, result) => {
+                    conn.release()
+                    if (err) { console.log(err) }
+                    else {
+                        res.send(result)
+                    }
+                })
+            }
+            else {
+                var sql = "SELECT `tb_book_id`, `tb_book_name`, `tb_book_author`, `tb_book_image`, `tb_book_state` FROM `tb_book` ORDER BY `tb_book_id` DESC LIMIT 10"
+                conn.query(sql, (err, result) => {
+                    conn.release()
+                    if (err) { console.log(err) }
+                    else {
+                        res.send(result)
+                    }
+                })
+            }
         }
     })
 });
@@ -95,7 +125,7 @@ router.post('/insertBookImage', bookUpload.single("file"), function (req, res) {
             var sql = "UPDATE `tb_book` SET `tb_book_image`=? WHERE `tb_book_id`=?"
             var imageFile = null
             //넘어온 이미지 파일이 있으면 ip 절대주소 저장
-            if (req.body.file !== null) { imageFile = "http://192.168.0.2:4000/images/" + req.body.bookId + ".png" }
+            if (req.body.file !== "") { imageFile = "http://192.168.0.2:4000/images/" + req.body.bookId + ".png" }
 
             conn.query(sql, [imageFile, req.body.bookId], (err, result) => {
                 conn.release()
@@ -141,7 +171,14 @@ router.post('/deleteBook', function (req, res) {
                         conn.release()
                         if (err) { console.log(err) }
                         else {
-                            res.send(result)
+                            //업로드된 이미지 삭제
+                            fs.unlink('../public/images/' + req.body.bookId + '.png', (err) => {
+                                if (err) {
+                                    console.error(err)
+                                    return
+                                }
+                                res.send(result)
+                            })
                         }
                     })
                 }

@@ -10,6 +10,7 @@ class MainContainer extends Component {
         bookData: [],
         modalIsOpen: false,
 
+        page: 1,
         modalBook: []
     }
 
@@ -17,12 +18,9 @@ class MainContainer extends Component {
         this._selectBook();
     }
 
-    componentDidUpdate = () => {
-        this._selectBook();
-    }
-
     _selectBook = () => {
         am.url = "http://192.168.0.2:4000/books/getAllBook"
+        am.params = {}
 
         am.get((data) => {
             console.log(data)
@@ -109,6 +107,46 @@ class MainContainer extends Component {
         })
     }
 
+    _clickPrevious = () => {
+        var previousId = this.state.bookData[0].tb_book_id
+        console.log(previousId)
+
+        am.url = "http://192.168.0.2:4000/books/getAllBook"
+        am.params = { previousId: previousId }
+
+        am.get((data) => {
+            if (data.length === 0) {
+                alert("첫 번째 페이지 입니다. ")
+            }
+            else {
+                this.setState({
+                    page: this.state.page - 1,
+                    bookData: data
+                })
+            }
+        })
+    }
+
+    _clickNext = () => {
+        var nextId = this.state.bookData[this.state.bookData.length - 1].tb_book_id
+        console.log(nextId)
+
+        am.url = "http://192.168.0.2:4000/books/getAllBook"
+        am.params = { nextId: nextId }
+
+        am.get((data) => {
+            if (data.length === 0) {
+                alert("마지막 페이지 입니다. ")
+            }
+            else {
+                this.setState({
+                    page: this.state.page + 1,
+                    bookData: data
+                })
+            }
+        })
+    }
+
     render() {
         return (
             <div>
@@ -120,7 +158,9 @@ class MainContainer extends Component {
                     updateBookData={this._updateBookData}
                     deleteBook={this._deleteBook}
                     borrow={this._borrow}
-                    return={this._return}></MainPresenter>
+                    return={this._return}
+                    clickPrevious={this._clickPrevious}
+                    clickNext={this._clickNext}></MainPresenter>
             </div>
         );
     }
