@@ -35,7 +35,7 @@ class BookRegisterContainer extends Component {
 
     _bookRegister = () => {
         //book register
-        am.url = "http://192.168.0.2:4000/books/insertBook"
+        am.url = "http://localhost:4000/books/insertBook"
         am.data = { bookName: this.state.bookName, bookAuthor: this.state.bookAuthor }
 
         am.post((data) => {
@@ -43,7 +43,7 @@ class BookRegisterContainer extends Component {
             var formData = new FormData();
             formData.append("bookId", data.insertId)
             formData.append("file", this.state.bookImage)
-            am.url = "http://192.168.0.2:4000/books/insertBookImage";
+            am.url = "http://localhost:4000/books/insertBookImage";
             am.data = formData;
 
             am.post((data) => {

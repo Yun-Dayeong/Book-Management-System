@@ -20,7 +20,7 @@ class LoginContainer extends Component {
     }
 
     login = () => {
-        am.url = "http://192.168.0.2:4000/users/login"
+        am.url = "http://localhost:4000/users/login"
         am.data = { userId: this.state.userId, userPassword: this.state.userPassword }
 
         am.post((data) => {

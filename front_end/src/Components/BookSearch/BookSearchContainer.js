@@ -32,7 +32,7 @@ class BookSearchContainer extends Component {
     }
 
     _selectBook = () => {
-        am.url = "http://192.168.0.2:4000/books/getAllBook"
+        am.url = "http://localhost:4000/books/getAllBook"
 
         am.get((data) => {
             data = data.filter(book => {
@@ -49,7 +49,7 @@ class BookSearchContainer extends Component {
     }
 
     _deleteBook = () => {
-        am.url = "http://192.168.0.2:4000/books/deleteBook"
+        am.url = "http://localhost:4000/books/deleteBook"
         am.data = { bookId: this.state.modalBook.tb_book_id }
 
         am.post((data) => {
@@ -65,7 +65,7 @@ class BookSearchContainer extends Component {
     }
 
     _borrow = () => {
-        am.url = "http://192.168.0.2:4000/books/borrowBook"
+        am.url = "http://localhost:4000/books/borrowBook"
         am.data = { userId: this.props.userId, bookId: this.state.modalBook.tb_book_id }
 
         am.post((data) => {
@@ -76,12 +76,12 @@ class BookSearchContainer extends Component {
     }
 
     _return = () => {
-        am.url = `http://192.168.0.2:4000/books/borrowUser/${this.state.modalBook.tb_book_id}`
+        am.url = `http://localhost:4000/books/borrowUser/${this.state.modalBook.tb_book_id}`
 
         am.get((data) => {
             console.log(data[0])
             if (data[0].tb_user_id === this.props.userId) {
-                am.url = "http://192.168.0.2:4000/books/returnBook"
+                am.url = "http://localhost:4000/books/returnBook"
                 am.data = { borrowId: data[0].tb_borrow_id, bookId: this.state.modalBook.tb_book_id }
 
                 am.post((data) => {
@@ -111,7 +111,7 @@ class BookSearchContainer extends Component {
     }
 
     _modalBookData = (bookId) => {
-        am.url = `http://192.168.0.2:4000/books/getBook/${bookId}`
+        am.url = `http://localhost:4000/books/getBook/${bookId}`
 
         am.get((data) => {
             console.log(data[0])

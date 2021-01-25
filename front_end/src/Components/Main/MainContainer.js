@@ -19,7 +19,7 @@ class MainContainer extends Component {
     }
 
     _selectBook = () => {
-        am.url = "http://192.168.0.2:4000/books/getMainBook"
+        am.url = "http://localhost:4000/books/getMainBook"
         am.params = {}
 
         am.get((data) => {
@@ -35,7 +35,7 @@ class MainContainer extends Component {
     }
 
     _deleteBook = () => {
-        am.url = "http://192.168.0.2:4000/books/deleteBook"
+        am.url = "http://localhost:4000/books/deleteBook"
         am.data = { bookId: this.state.modalBook.tb_book_id }
 
         am.post((data) => {
@@ -51,7 +51,7 @@ class MainContainer extends Component {
     }
 
     _borrow = () => {
-        am.url = "http://192.168.0.2:4000/books/borrowBook"
+        am.url = "http://localhost:4000/books/borrowBook"
         am.data = { userId: this.props.userId, bookId: this.state.modalBook.tb_book_id }
 
         am.post((data) => {
@@ -62,12 +62,12 @@ class MainContainer extends Component {
     }
 
     _return = () => {
-        am.url = `http://192.168.0.2:4000/books/borrowUser/${this.state.modalBook.tb_book_id}`
+        am.url = `http://localhost:4000/books/borrowUser/${this.state.modalBook.tb_book_id}`
 
         am.get((data) => {
             console.log(data[0])
             if (data[0].tb_user_id === this.props.userId) {
-                am.url = "http://192.168.0.2:4000/books/returnBook"
+                am.url = "http://localhost:4000/books/returnBook"
                 am.data = { borrowId: data[0].tb_borrow_id, bookId: this.state.modalBook.tb_book_id }
 
                 am.post((data) => {
@@ -97,7 +97,7 @@ class MainContainer extends Component {
     }
 
     _modalBookData = (bookId) => {
-        am.url = `http://192.168.0.2:4000/books/getBook/${bookId}`
+        am.url = `http://localhost:4000/books/getBook/${bookId}`
 
         am.get((data) => {
             console.log(data[0])
@@ -111,7 +111,7 @@ class MainContainer extends Component {
         var previousId = this.state.bookData[0].tb_book_id
         console.log(previousId)
 
-        am.url = "http://192.168.0.2:4000/books/getMainBook"
+        am.url = "http://localhost:4000/books/getMainBook"
         am.params = { previousId: previousId }
 
         am.get((data) => {
@@ -131,7 +131,7 @@ class MainContainer extends Component {
         var nextId = this.state.bookData[this.state.bookData.length - 1].tb_book_id
         console.log(nextId)
 
-        am.url = "http://192.168.0.2:4000/books/getMainBook"
+        am.url = "http://localhost:4000/books/getMainBook"
         am.params = { nextId: nextId }
 
         am.get((data) => {

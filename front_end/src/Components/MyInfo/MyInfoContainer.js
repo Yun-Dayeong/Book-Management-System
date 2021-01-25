@@ -18,7 +18,7 @@ class MyInfoContainer extends Component {
     }
 
     _selectBorrowBook = () => {
-        am.url = `http://192.168.0.2:4000/users/getUser/${this.props.userId}`
+        am.url = `http://localhost:4000/users/getUser/${this.props.userId}`
 
         am.get((data) => {
             this.setState({
@@ -28,12 +28,12 @@ class MyInfoContainer extends Component {
             })
         })
 
-        am.url = `http://192.168.0.2:4000/books/getBorrowBook/${this.props.userId}`
+        am.url = `http://localhost:4000/books/getBorrowBook/${this.props.userId}`
 
         am.get((data) => {
             // console.log(data[0])
             for (var i = 0; i < data.length; i++) {
-                am.url = `http://192.168.0.2:4000/books/getBook/${data[i].tb_book_id}`
+                am.url = `http://localhost:4000/books/getBook/${data[i].tb_book_id}`
 
                 am.get((data) => {
                     this.setState({

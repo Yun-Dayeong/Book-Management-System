@@ -19,7 +19,7 @@ class JoinContainer extends Component {
     }
 
     _join = () => {
-        am.url = "http://192.168.0.2:4000/users/join"
+        am.url = "http://localhost:4000/users/join"
         am.data = { userId: this.state.userId, userPassword: this.state.userPassword, userName: this.state.userName, userManagement: 0 }
 
         am.post((data) => {

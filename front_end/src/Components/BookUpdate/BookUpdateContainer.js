@@ -17,7 +17,7 @@ class BookUpdateContainer extends Component {
     }
 
     _selectBook = () => {
-        am.url = `http://192.168.0.2:4000/books/getBook/${this.props.location.state.bookId}`
+        am.url = `http://localhost:4000/books/getBook/${this.props.location.state.bookId}`
 
         am.get((data) => {
             console.log(data[0])
@@ -46,7 +46,7 @@ class BookUpdateContainer extends Component {
 
 
         //book update
-        am.url = "http://192.168.0.2:4000/books/updateBook"
+        am.url = "http://localhost:4000/books/updateBook"
         am.data = { bookId: this.props.location.state.bookId, bookName: this.state.bookName, bookAuthor: this.state.bookAuthor, bookImage: this.state.bookImage }
 
         am.post((data) => {
