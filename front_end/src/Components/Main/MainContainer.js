@@ -19,7 +19,7 @@ class MainContainer extends Component {
     }
 
     _selectBook = () => {
-        am.url = "http://192.168.0.2:4000/books/getAllBook"
+        am.url = "http://192.168.0.2:4000/books/getMainBook"
         am.params = {}
 
         am.get((data) => {
@@ -111,7 +111,7 @@ class MainContainer extends Component {
         var previousId = this.state.bookData[0].tb_book_id
         console.log(previousId)
 
-        am.url = "http://192.168.0.2:4000/books/getAllBook"
+        am.url = "http://192.168.0.2:4000/books/getMainBook"
         am.params = { previousId: previousId }
 
         am.get((data) => {
@@ -131,7 +131,7 @@ class MainContainer extends Component {
         var nextId = this.state.bookData[this.state.bookData.length - 1].tb_book_id
         console.log(nextId)
 
-        am.url = "http://192.168.0.2:4000/books/getAllBook"
+        am.url = "http://192.168.0.2:4000/books/getMainBook"
         am.params = { nextId: nextId }
 
         am.get((data) => {

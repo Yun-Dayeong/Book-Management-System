@@ -13,6 +13,23 @@ var bookId = ""
 
 /* 전체 책 데이터 불러오기 */
 router.get('/getAllBook', function (req, res) {
+    pool.getConnection((err, conn) => {
+        if (err) { console.log(err) }
+        else {
+            var sql = "SELECT `tb_book_id`, `tb_book_name`, `tb_book_author`, `tb_book_image`, `tb_book_state` FROM `tb_book`"
+            conn.query(sql, (err, result) => {
+                conn.release()
+                if (err) { console.log(err) }
+                else {
+                    res.send(result)
+                }
+            })
+        }
+    })
+});
+
+/* 메인화면 책 데이터 불러오기 */
+router.get('/getMainBook', function (req, res) {
     var urlParse = url.parse(req.url, true);
     var queryString = urlParse.query;
 
@@ -54,6 +71,7 @@ router.get('/getAllBook', function (req, res) {
         }
     })
 });
+
 
 /* 해당 id의 책 데이터 불러오기 */
 router.get('/getBook/:bookId', function (req, res) {

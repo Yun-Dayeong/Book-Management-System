@@ -7,18 +7,28 @@ let am = new APIManager();
 class BookSearchContainer extends Component {
     state = {
         bookData: [],
-        searchName: "",
+        searchName: null,
         modalIsOpen: false,
+        page: 1,
 
         modalBook: []
     }
 
     componentDidMount = () => {
+        this.setState({
+            searchName: this.props.match.params.searchName
+        })
         this._selectBook();
     }
 
+    //검색어가 바뀌었을 때
     componentDidUpdate = () => {
-        this._selectBook();
+        if (this.state.searchName !== this.props.match.params.searchName) {
+            this.setState({
+                searchName: this.props.match.params.searchName
+            })
+            this._selectBook();
+        }
     }
 
     _selectBook = () => {
@@ -26,8 +36,7 @@ class BookSearchContainer extends Component {
 
         am.get((data) => {
             data = data.filter(book => {
-                console.log(book)
-                return book.tb_book_name.includes(this.props.match.params.searchName)
+                return book.tb_book_name.includes(this.state.searchName)
             })
             this.setState({
                 bookData: data
