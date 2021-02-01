@@ -190,12 +190,15 @@ router.post('/deleteBook', function (req, res) {
                         if (err) { console.log(err) }
                         else {
                             //업로드된 이미지 삭제
-                            fs.unlink('../public/images/' + req.body.bookId + '.png', (err) => {
+                            var path = './public/images/' + req.body.bookId + '.png'
+                            fs.unlink(path, (err) => {
                                 if (err) {
                                     console.error(err)
-                                    return
+                                    res.send("No file")
                                 }
-                                res.send(result)
+                                else {
+                                    res.send(result)
+                                }
                             })
                         }
                     })
@@ -263,6 +266,7 @@ router.get('/borrowUser/:bookId', function (req, res) {
         else {
             var sql = "SELECT * FROM `tb_borrow` WHERE `tb_book_id`=?"
             conn.query(sql, [req.params.bookId], (err, result) => {
+                conn.release()
                 if (err) { console.log(err) }
                 else {
                     res.send(result)

@@ -9,7 +9,9 @@ class BookUpdateContainer extends Component {
     state = {
         bookName: "",
         bookAuthor: "",
+
         bookImage: "",
+        imageViewURL: ""
     }
 
     componentDidMount = () => {
@@ -24,7 +26,7 @@ class BookUpdateContainer extends Component {
             this.setState({
                 bookName: data[0].tb_book_name,
                 bookAuthor: data[0].tb_book_author,
-                bookImage: data[0].tb_book_image,
+                imageViewURL: data[0].tb_book_image,
             })
         })
     }
@@ -35,30 +37,55 @@ class BookUpdateContainer extends Component {
         })
     }
 
-    _imageSetting = () => {
-
+    _inputFile = (e) => {
+        let reader = new FileReader();
+        let imageFile = e.target.files[0];
+        console.log(imageFile)
+        reader.onloadend = () => {
+            this.setState({
+                bookImage: imageFile,
+                imageViewURL: reader.result
+            })
+        }
+        reader.readAsDataURL(imageFile);
     }
 
     _bookUpdate = () => {
 
-        //image register
-
-
-
         //book update
         am.url = "http://localhost:4000/books/updateBook"
-        am.data = { bookId: this.props.location.state.bookId, bookName: this.state.bookName, bookAuthor: this.state.bookAuthor, bookImage: this.state.bookImage }
+        am.data = { bookId: this.props.location.state.bookId, bookName: this.state.bookName, bookAuthor: this.state.bookAuthor }
 
         am.post((data) => {
             console.log(data)
-            this.props.history.push('/')
+            //image register
+            var formData = new FormData();
+            formData.append("bookId", data.insertId)
+            formData.append("file", this.state.bookImage)
+            am.url = "http://localhost:4000/books/insertBookImage";
+            am.data = formData;
+
+            am.post((data) => {
+                console.log(data);
+                this.props.history.goBack();
+            })
         })
+    }
+
+    _cancel = () => {
+        this.props.history.goBack()
     }
 
     render() {
         return (
             <div>
-                <BookUpdatePresenter {...this.props} {...this.state} changehandler={this.changehandler} imageSetting={this._imageSetting} bookUpdate={this._bookUpdate}></BookUpdatePresenter>
+                <BookUpdatePresenter
+                    {...this.props}
+                    {...this.state}
+                    changehandler={this.changehandler}
+                    inputFile={this._inputFile}
+                    bookUpdate={this._bookUpdate}
+                    cancel={this._cancel}></BookUpdatePresenter>
             </div>
         );
     }

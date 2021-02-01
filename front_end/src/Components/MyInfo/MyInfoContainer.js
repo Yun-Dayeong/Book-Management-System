@@ -10,7 +10,7 @@ class MyInfoContainer extends Component {
         userPassword: "",
         userName: "",
 
-        bookData: []
+        bookData: [],
     }
 
     componentDidMount = () => {
@@ -44,10 +44,30 @@ class MyInfoContainer extends Component {
         })
     }
 
+    _return = (bookId) => {
+        am.url = `http://localhost:4000/books/borrowUser/${bookId}`
+
+        am.get((data) => {
+            console.log(data[0])
+            am.url = "http://localhost:4000/books/returnBook"
+            am.data = { borrowId: data[0].tb_borrow_id, bookId: bookId }
+
+            am.post((data) => {
+                this.setState({
+                    bookData: []
+                })
+                this._selectBorrowBook()
+            })
+        })
+    }
+
     render() {
         return (
             <div>
-                <MyInfoPresenter {...this.props} {...this.state}></MyInfoPresenter>
+                <MyInfoPresenter
+                    {...this.props}
+                    {...this.state}
+                    return={this._return}></MyInfoPresenter>
             </div>
         );
     }

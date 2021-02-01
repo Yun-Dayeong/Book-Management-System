@@ -48,9 +48,13 @@ class BookRegisterContainer extends Component {
 
             am.post((data) => {
                 console.log(data);
-                this.props.history.push('/');
+                this.props.history.goBack();
             })
         })
+    }
+
+    _cancel = () => {
+        this.props.history.goBack()
     }
 
     render() {
@@ -61,7 +65,8 @@ class BookRegisterContainer extends Component {
                     {...this.state}
                     changehandler={this.changehandler}
                     bookRegister={this._bookRegister}
-                    inputFile={this._inputFile}></BookRegisterPresenter>
+                    inputFile={this._inputFile}
+                    cancel={this._cancel}></BookRegisterPresenter>
             </div>
         );
     }

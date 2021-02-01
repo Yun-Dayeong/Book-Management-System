@@ -15,6 +15,7 @@ class App extends Component {
   state = {
     userId: "",
     userPassword: "",
+    userName: "",
     userManagement: -1,
   }
 
@@ -22,6 +23,7 @@ class App extends Component {
     this.setState({
       userId: data.tb_user_id,
       userPassword: data.tb_user_password,
+      userName: data.tb_user_name,
       userManagement: data.tb_user_management
     })
   }
@@ -30,6 +32,7 @@ class App extends Component {
     this.setState({
       userId: "",
       userPassword: "",
+      userName: "",
       userManagement: -1,
     })
   }
@@ -38,11 +41,11 @@ class App extends Component {
     return (
       <BrowserRouter>
         <Header {...this.state} logout={this.logout}></Header>
-        <Route exact path="/" render={(props) => <Main {...this.state} {...props}></Main>} />
-        <Route path="/join" render={(props) => <Join {...this.state} {...props}></Join>} />
-        <Route path="/login" render={(props) => <Login {...this.state} {...props} session={this.session}></Login>} />
-        <Route path="/myInfo" render={(props) => <MyInfo {...this.state} {...props}></MyInfo>} />
-        <Route path="/bookRegister" render={(props) => <BookRegister {...this.state} {...props}></BookRegister>} />
+        <Route exact path="/" render={(props) => <Main {...this.state} {...props} key={Date.now()}></Main>} />
+        <Route path="/join" render={(props) => <Join {...this.state} {...props}></Join>} key={Date.now()} />
+        <Route path="/login" render={(props) => <Login {...this.state} {...props} session={this.session} key={Date.now()}></Login>} />
+        <Route path="/myInfo" render={(props) => <MyInfo {...this.state} {...props} key={Date.now()}></MyInfo>} />
+        <Route path="/bookRegister" render={(props) => <BookRegister {...this.state} {...props} key={Date.now()}></BookRegister>} />
         <Route path="/bookUpdate" render={(props) => <BookUpdate {...this.state} {...props}></BookUpdate>} />
         <Route path="/bookSearch/:searchName" render={(props) => <BookSearch {...this.state} {...props}></BookSearch>} />
       </BrowserRouter>
