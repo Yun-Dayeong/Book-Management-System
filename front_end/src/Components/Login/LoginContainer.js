@@ -20,13 +20,21 @@ class LoginContainer extends Component {
     }
 
     login = () => {
-        am.url = "http://localhost:4000/users/login"
-        am.data = { userId: this.state.userId, userPassword: this.state.userPassword }
+        if (this.state.userId === "") {
+            alert("아이디를 입력하세요. ")
+        }
+        else if (this.state.userPassword === "") {
+            alert("비밀번호를 입력하세요. ")
+        }
+        else {
+            am.url = "http://localhost:4000/users/login"
+            am.data = { userId: this.state.userId, userPassword: this.state.userPassword }
 
-        am.post((data) => {
-            this.props.session(data[0])
-            this.props.history.push('/')
-        })
+            am.post((data) => {
+                this.props.session(data[0])
+                this.props.history.push('/')
+            })
+        }
     }
 
     render() {

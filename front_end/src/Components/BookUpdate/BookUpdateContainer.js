@@ -52,24 +52,35 @@ class BookUpdateContainer extends Component {
 
     _bookUpdate = () => {
 
-        //book update
-        am.url = "http://localhost:4000/books/updateBook"
-        am.data = { bookId: this.props.location.state.bookId, bookName: this.state.bookName, bookAuthor: this.state.bookAuthor }
-
-        am.post((data) => {
-            console.log(data)
-            //image register
-            var formData = new FormData();
-            formData.append("bookId", data.insertId)
-            formData.append("file", this.state.bookImage)
-            am.url = "http://localhost:4000/books/insertBookImage";
-            am.data = formData;
+        if (this.state.bookName === "") {
+            alert("책 이름을 입력하세요. ")
+        }
+        else if (this.state.bookAuthor === "") {
+            alert("작가를 입력하세요. ")
+        }
+        else if (this.state.imageViewURL === "") {
+            alert("책 이미지를 입력하세요. ")
+        }
+        else {
+            //book update
+            am.url = "http://localhost:4000/books/updateBook"
+            am.data = { bookId: this.props.location.state.bookId, bookName: this.state.bookName, bookAuthor: this.state.bookAuthor }
 
             am.post((data) => {
-                console.log(data);
-                this.props.history.goBack();
+                console.log(data)
+                //image register
+                var formData = new FormData();
+                formData.append("bookId", data.insertId)
+                formData.append("file", this.state.bookImage)
+                am.url = "http://localhost:4000/books/insertBookImage";
+                am.data = formData;
+
+                am.post((data) => {
+                    console.log(data);
+                    this.props.history.goBack();
+                })
             })
-        })
+        }
     }
 
     _cancel = () => {
