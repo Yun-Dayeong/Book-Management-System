@@ -31,8 +31,16 @@ class LoginContainer extends Component {
             am.data = { userId: this.state.userId, userPassword: this.state.userPassword }
 
             am.post((data) => {
-                this.props.session(data[0])
-                this.props.history.push('/')
+                if (data.msg === 200) {
+                    this.props.session(data.result[0])
+                    this.props.history.push('/')
+                }
+                else if (data.msg === 204) {
+                    alert("아이디 또는 비밀번호가 잘못 입력되었습니다. ")
+                }
+                else {
+                    alert("오류! 페이지 새로고침 후 다시 시도해주세요. ")
+                }
             })
         }
     }

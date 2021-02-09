@@ -21,25 +21,39 @@ class MyInfoContainer extends Component {
         am.url = `http://localhost:4000/users/getUser/${this.props.userId}`
 
         am.get((data) => {
-            this.setState({
-                userId: data[0].tb_user_id,
-                userPassword: data[0].tb_user_password,
-                userName: data[0].tb_user_name,
-            })
+            if (data.msg === 200) {
+                this.setState({
+                    userId: data.result[0].tb_user_id,
+                    userPassword: data.result[0].tb_user_password,
+                    userName: data.result[0].tb_user_name,
+                })
+            }
+            else {
+                alert("오류! 다시 시도해주세요. ")
+            }
         })
 
         am.url = `http://localhost:4000/books/getBorrowBook/${this.props.userId}`
 
         am.get((data) => {
-            // console.log(data[0])
-            for (var i = 0; i < data.length; i++) {
-                am.url = `http://localhost:4000/books/getBook/${data[i].tb_book_id}`
+            if (data.msg === 200) {
+                for (var i = 0; i < data.result.length; i++) {
+                    am.url = `http://localhost:4000/books/getBook/${data.result[i].tb_book_id}`
 
-                am.get((data) => {
-                    this.setState({
-                        bookData: this.state.bookData.concat(data[0])
+                    am.get((data) => {
+                        if (data.msg === 200) {
+                            this.setState({
+                                bookData: this.state.bookData.concat(data.result[0])
+                            })
+                        }
+                        else {
+                            alert("오류! 다시 시도해주세요. ")
+                        }
                     })
-                })
+                }
+            }
+            else {
+                alert("오류! 다시 시도해주세요. ")
             }
         })
     }
@@ -48,16 +62,26 @@ class MyInfoContainer extends Component {
         am.url = `http://localhost:4000/books/borrowUser/${bookId}`
 
         am.get((data) => {
-            console.log(data[0])
-            am.url = "http://localhost:4000/books/returnBook"
-            am.data = { borrowId: data[0].tb_borrow_id, bookId: bookId }
+            if (data.msg === 200) {
+                am.url = "http://localhost:4000/books/returnBook"
+                am.data = { borrowId: data.result[0].tb_borrow_id, bookId: bookId }
 
-            am.post((data) => {
-                this.setState({
-                    bookData: []
+                am.post((data) => {
+                    if (data.msg === 200) {
+                        alert("반납되었습니다. ")
+                        this.setState({
+                            bookData: []
+                        })
+                        this._selectBorrowBook()
+                    }
+                    else {
+                        alert("오류! 다시 시도해주세요. ")
+                    }
                 })
-                this._selectBorrowBook()
-            })
+            }
+            else {
+                alert("오류! 다시 시도해주세요. ")
+            }
         })
     }
 

@@ -33,8 +33,16 @@ class JoinContainer extends Component {
             am.data = { userId: this.state.userId, userPassword: this.state.userPassword, userName: this.state.userName, userManagement: 0 }
 
             am.post((data) => {
-                console.log(data)
-                this.props.history.push('/login')
+                if (data.msg === 200) {
+                    alert("회원가입 되었습니다. ")
+                    this.props.history.push('/login')
+                }
+                else if (data.msg === 202) {
+                    alert("이미 존재하는 아이디 입니다. ")
+                }
+                else {
+                    alert("오류! 페이지 새로고침 후 다시 시도해주세요. ")
+                }
             })
         }
     }

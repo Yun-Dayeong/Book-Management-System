@@ -22,12 +22,16 @@ class BookUpdateContainer extends Component {
         am.url = `http://localhost:4000/books/getBook/${this.props.location.state.bookId}`
 
         am.get((data) => {
-            console.log(data[0])
-            this.setState({
-                bookName: data[0].tb_book_name,
-                bookAuthor: data[0].tb_book_author,
-                imageViewURL: data[0].tb_book_image,
-            })
+            if (data.msg === 200) {
+                this.setState({
+                    bookName: data.result[0].tb_book_name,
+                    bookAuthor: data.result[0].tb_book_author,
+                    imageViewURL: data.result[0].tb_book_image,
+                })
+            }
+            else {
+                alert("오류! 다시 시도해주세요. ")
+            }
         })
     }
 
@@ -67,18 +71,27 @@ class BookUpdateContainer extends Component {
             am.data = { bookId: this.props.location.state.bookId, bookName: this.state.bookName, bookAuthor: this.state.bookAuthor }
 
             am.post((data) => {
-                console.log(data)
-                //image register
-                var formData = new FormData();
-                formData.append("bookId", data.insertId)
-                formData.append("file", this.state.bookImage)
-                am.url = "http://localhost:4000/books/insertBookImage";
-                am.data = formData;
+                if (data.msg === 200) {
+                    //image register
+                    var formData = new FormData();
+                    formData.append("bookId", data.result.insertId)
+                    formData.append("file", this.state.bookImage)
+                    am.url = "http://localhost:4000/books/insertBookImage";
+                    am.data = formData;
 
-                am.post((data) => {
-                    console.log(data);
-                    this.props.history.goBack();
-                })
+                    am.post((data) => {
+                        if (data.msg === 200) {
+                            alert("수정되었습니다. ")
+                            this.props.history.goBack();
+                        }
+                        else {
+                            alert("오류! 다시 시도해주세요. ")
+                        }
+                    })
+                }
+                else {
+                    alert("오류! 다시 시도해주세요. ")
+                }
             })
         }
     }

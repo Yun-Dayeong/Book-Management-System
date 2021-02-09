@@ -49,17 +49,27 @@ class BookRegisterContainer extends Component {
             am.data = { bookName: this.state.bookName, bookAuthor: this.state.bookAuthor }
 
             am.post((data) => {
-                //image register
-                var formData = new FormData();
-                formData.append("bookId", data.insertId)
-                formData.append("file", this.state.bookImage)
-                am.url = "http://localhost:4000/books/insertBookImage";
-                am.data = formData;
+                if (data.msg === 200) {
+                    //image register
+                    var formData = new FormData();
+                    formData.append("bookId", data.result.insertId)
+                    formData.append("file", this.state.bookImage)
+                    am.url = "http://localhost:4000/books/insertBookImage";
+                    am.data = formData;
 
-                am.post((data) => {
-                    console.log(data);
-                    this.props.history.goBack();
-                })
+                    am.post((data) => {
+                        if (data.msg === 200) {
+                            alert("등록되었습니다. ")
+                            this.props.history.goBack();
+                        }
+                        else {
+                            alert("오류! 다시 시도해주세요. ")
+                        }
+                    })
+                }
+                else {
+                    alert("오류! 다시 시도해주세요. ")
+                }
             })
         }
     }
