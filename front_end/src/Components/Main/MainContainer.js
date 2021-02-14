@@ -25,6 +25,7 @@ class MainContainer extends Component {
         am.get((data) => {
             if (data.msg === 200) {
                 this.setState({
+                    page: 1,
                     bookData: data.result
                 })
             }
@@ -66,7 +67,6 @@ class MainContainer extends Component {
         am.post((data) => {
             if (data.msg === 200) {
                 alert("대출되었습니다. ")
-                this._selectBook()
                 this._modalBookData(this.state.modalBook.tb_book_id)
             }
             else {
@@ -87,7 +87,6 @@ class MainContainer extends Component {
                     am.post((data) => {
                         if (data.msg === 200) {
                             alert("반납되었습니다. ")
-                            this._selectBook()
                             this._modalBookData(this.state.modalBook.tb_book_id)
                         }
                         else {
