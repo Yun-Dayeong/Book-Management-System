@@ -97,6 +97,7 @@ router.get('/getBorrowBook/:userId', function (req, res) {
         else {
             var sql = "SELECT `tb_book_id` FROM `tb_borrow` WHERE `tb_user_id`=?"
             conn.query(sql, [req.params.userId], (err, result) => {
+                conn.release()
                 if (err) { res.send({ msg: 400 }) }
                 else {
                     res.send({ msg: 200, result: result })
@@ -144,7 +145,6 @@ router.post('/insertBookImage', bookUpload.single("file"), function (req, res) {
             var imageFile = null
             //넘어온 이미지 파일이 있으면 ip 절대주소 저장
             if (req.body.file !== "") { imageFile = "http://192.168.0.2:4000/images/" + req.body.bookId + ".png" }
-
             conn.query(sql, [imageFile, req.body.bookId], (err, result) => {
                 conn.release()
                 if (err) { res.send({ msg: 400 }) }
